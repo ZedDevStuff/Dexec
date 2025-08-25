@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 
@@ -16,10 +17,9 @@ internal partial class Program
     public static partial Regex VarRegex();
     static void Main(string[] args)
     {
-        if (args.Length == 0) return;
-        if (args[0] == "-s" || args[0] == "--setup")
+        if (args.Length == 0)
         {
-            Setup();
+            if(OperatingSystem.IsWindows()) Setup();
             return;
         }
         if (!File.Exists(args[0])) return;
@@ -52,12 +52,16 @@ internal partial class Program
     static void Setup()
     {
         // Register self in window's context menu
-        RegistryKey? key = Registry.ClassesRoot.OpenSubKey(@"*\shell");
+        RegistryKey? key = Registry.ClassesRoot.OpenSubKey(@"*\shell", true);
         if(key != null)
         {
-            var localRoot = key.CreateSubKey("Dexec");
-            localRoot.SetValue("", "Dexec");
-            localRoot.CreateSubKey("command").SetValue("", $"\"{Path.Combine(AppContext.BaseDirectory, "Dexec.exe")}\" \"%1\"");
+            var localRoot = key.CreateSubKey("Dexec", true);
+            if (localRoot == null)
+            {
+                return;
+            }
+            localRoot.SetValue(null, "Dexec");
+            localRoot.CreateSubKey("command", true).SetValue("", $"\"{Path.Combine(AppContext.BaseDirectory, "Dexec.exe")}\" \"%1\"");
         }
     }
 }

@@ -3,7 +3,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 
@@ -11,7 +10,7 @@ namespace Dexec;
 
 internal partial class Program
 {
-    [GeneratedRegex(@"#(?:\s+)?(?<binary>.+)")]
+    [GeneratedRegex(@"#!(?:\s+)?(?<binary>.+)")]
     public static partial Regex HeaderRegex();
     [GeneratedRegex(@"\(env:(?<env_var>.+)\)")]
     public static partial Regex VarRegex();
@@ -37,7 +36,7 @@ internal partial class Program
             if (value is null) return;
             firstLine = firstLine.Replace(match.Value, value);
         }
-        Process process = new Process();
+        Process process = new();
         string[] split = firstLine.Split(' ');
         if (split.Length > 1)
             process.StartInfo = new ProcessStartInfo(split[0], string.Join(' ', [.. split[1..], args[0]]));
@@ -51,16 +50,14 @@ internal partial class Program
     [SupportedOSPlatform("Windows")]
     static void Setup()
     {
-        // Register self in window's context menu
         RegistryKey? key = Registry.ClassesRoot.OpenSubKey(@"*\shell", true);
         if(key != null)
         {
             var localRoot = key.CreateSubKey("Dexec", true);
             if (localRoot == null)
-            {
                 return;
-            }
             localRoot.SetValue(null, "Dexec");
+            localRoot.SetValue("Icon", Path.Combine(AppContext.BaseDirectory, "Dexec.exe"));
             localRoot.CreateSubKey("command", true).SetValue("", $"\"{Path.Combine(AppContext.BaseDirectory, "Dexec.exe")}\" \"%1\"");
         }
     }

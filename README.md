@@ -4,7 +4,7 @@ Shebang for windows. That's it.
 
 ## Why?
 
-I was bored. That's it.
+I was bored, and as a programmer there isn't any better reason to do stuff.
 
 ## Installation and Usage
 

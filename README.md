@@ -8,7 +8,7 @@ I was bored, and as a programmer there isn't any better reason to do stuff.
 
 ## Installation and Usage
 
-Make sure you have the [.NET SDK](https://dotnet.microsoft.com/download) installed along with Visual Studio 2022 with [NativeAOT prerequisites](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/?tabs=windows%2Cnet8#tabpanel_1_windows).
+Make sure you have the [.NET SDK](https://dotnet.microsoft.com/download) installed along with Visual Studio 2022 (or 2026) and the [NativeAOT prerequisites](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/?tabs=windows%2Cnet8#tabpanel_1_windows).
 
 1- Clone the repository or download the source code and navigate to the project directory.
 
